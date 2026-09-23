@@ -1,0 +1,207 @@
+==============================================================================
+EVIDENCIA 6 - Pruebas de ping: inter-VLAN, trunk y ACL
+Capturado: 2026-09-22 20:43:03
+==============================================================================
+
+RESUMEN DE PRUEBAS DE CONECTIVIDAD
+
+ORIGEN  DESTINO          ESPERADO  OBTENIDO  RESP  DESCRIPCION
+--------------------------------------------------------------------------------------------------------------
+PC1     10.10.10.1       PASA      PASA      3/3   Gateway VLAN10
+PC1     10.10.10.105     PASA      PASA      3/3   PC1->PC4  misma VLAN10, cruzando el trunk SW1-SW2
+PC1     10.10.20.103     PASA      PASA      3/3   PC1->PC2  inter-VLAN 10->20 (Admin->Ventas)
+PC1     10.10.30.104     PASA      PASA      3/3   PC1->PC3  inter-VLAN 10->30 (Admin->IT)
+PC1     1.1.1.1          PASA      PASA      3/3   PC1->Internet (NAT del router)
+PC2     10.10.20.1       PASA      PASA      3/3   Gateway VLAN20
+PC2     10.10.20.106     PASA      PASA      3/3   PC2->PC5  misma VLAN20, cruzando el trunk
+PC2     10.10.30.104     BLOQUEA   BLOQUEA   0/3   PC2->PC3  ACL: Ventas(20) -> IT(30)
+PC3     10.10.30.1       PASA      PASA      3/3   Gateway VLAN30
+PC3     10.10.30.107     PASA      PASA      3/3   PC3->PC6  misma VLAN30, cruzando el trunk
+PC3     10.10.20.103     PASA      PASA      3/3   PC3->PC2  ACL: IT(30) -> Ventas(20)
+PC4     10.10.10.1       PASA      PASA      3/3   Gateway VLAN10 desde SW2
+PC5     10.10.20.1       PASA      PASA      3/3   Gateway VLAN20 desde SW2
+PC5     10.10.30.107     BLOQUEA   BLOQUEA   0/3   PC5->PC6  ACL: Ventas(20) -> IT(30) entre switches
+PC6     10.10.30.1       PASA      PASA      3/3   Gateway VLAN30 desde SW2
+PC6     10.10.20.106     PASA      PASA      3/3   PC6->PC5  ACL: IT(30) -> Ventas(20) entre switches
+--------------------------------------------------------------------------------------------------------------
+TOTAL: 16 pruebas | coinciden con lo esperado: 16 | discrepancias: 0
+
+
+SALIDA COMPLETA DE CADA PRUEBA
+==============================================================================================================
+
+### PC1 -> 10.10.10.1   [Gateway VLAN10]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 10.10.10.1 -c 3
+
+84 bytes from 10.10.10.1 icmp_seq=1 ttl=64 time=21.668 ms
+84 bytes from 10.10.10.1 icmp_seq=2 ttl=64 time=13.900 ms
+84 bytes from 10.10.10.1 icmp_seq=3 ttl=64 time=8.522 ms
+
+VPCS>
+
+### PC1 -> 10.10.10.105   [PC1->PC4  misma VLAN10, cruzando el trunk SW1-SW2]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 10.10.10.105 -c 3
+
+84 bytes from 10.10.10.105 icmp_seq=1 ttl=64 time=24.140 ms
+84 bytes from 10.10.10.105 icmp_seq=2 ttl=64 time=21.015 ms
+84 bytes from 10.10.10.105 icmp_seq=3 ttl=64 time=24.324 ms
+
+VPCS>
+
+### PC1 -> 10.10.20.103   [PC1->PC2  inter-VLAN 10->20 (Admin->Ventas)]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 10.10.20.103 -c 3
+
+84 bytes from 10.10.20.103 icmp_seq=1 ttl=63 time=46.433 ms
+84 bytes from 10.10.20.103 icmp_seq=2 ttl=63 time=43.484 ms
+84 bytes from 10.10.20.103 icmp_seq=3 ttl=63 time=26.615 ms
+
+VPCS>
+
+### PC1 -> 10.10.30.104   [PC1->PC3  inter-VLAN 10->30 (Admin->IT)]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 10.10.30.104 -c 3
+
+84 bytes from 10.10.30.104 icmp_seq=1 ttl=63 time=47.629 ms
+84 bytes from 10.10.30.104 icmp_seq=2 ttl=63 time=28.413 ms
+84 bytes from 10.10.30.104 icmp_seq=3 ttl=63 time=29.243 ms
+
+VPCS>
+
+### PC1 -> 1.1.1.1   [PC1->Internet (NAT del router)]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 1.1.1.1 -c 3
+
+84 bytes from 1.1.1.1 icmp_seq=1 ttl=60 time=48.701 ms
+84 bytes from 1.1.1.1 icmp_seq=2 ttl=60 time=39.526 ms
+84 bytes from 1.1.1.1 icmp_seq=3 ttl=60 time=47.742 ms
+
+VPCS>
+
+### PC2 -> 10.10.20.1   [Gateway VLAN20]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 10.10.20.1 -c 3
+
+84 bytes from 10.10.20.1 icmp_seq=1 ttl=64 time=25.074 ms
+84 bytes from 10.10.20.1 icmp_seq=2 ttl=64 time=10.430 ms
+84 bytes from 10.10.20.1 icmp_seq=3 ttl=64 time=9.966 ms
+
+VPCS>
+
+### PC2 -> 10.10.20.106   [PC2->PC5  misma VLAN20, cruzando el trunk]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 10.10.20.106 -c 3
+
+84 bytes from 10.10.20.106 icmp_seq=1 ttl=64 time=25.735 ms
+84 bytes from 10.10.20.106 icmp_seq=2 ttl=64 time=23.269 ms
+84 bytes from 10.10.20.106 icmp_seq=3 ttl=64 time=25.236 ms
+
+VPCS>
+
+### PC2 -> 10.10.30.104   [PC2->PC3  ACL: Ventas(20) -> IT(30)]
+### Esperado: BLOQUEA  |  Obtenido: BLOQUEA
+----------------------------------------------------------------------
+ping 10.10.30.104 -c 3
+
+10.10.30.104 icmp_seq=1 timeout
+10.10.30.104 icmp_seq=2 timeout
+10.10.30.104 icmp_seq=3 timeout
+
+VPCS>
+
+### PC3 -> 10.10.30.1   [Gateway VLAN30]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 10.10.30.1 -c 3
+
+84 bytes from 10.10.30.1 icmp_seq=1 ttl=64 time=13.826 ms
+84 bytes from 10.10.30.1 icmp_seq=2 ttl=64 time=12.248 ms
+84 bytes from 10.10.30.1 icmp_seq=3 ttl=64 time=14.382 ms
+
+VPCS>
+
+### PC3 -> 10.10.30.107   [PC3->PC6  misma VLAN30, cruzando el trunk]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 10.10.30.107 -c 3
+
+84 bytes from 10.10.30.107 icmp_seq=1 ttl=64 time=32.556 ms
+84 bytes from 10.10.30.107 icmp_seq=2 ttl=64 time=31.015 ms
+84 bytes from 10.10.30.107 icmp_seq=3 ttl=64 time=39.481 ms
+
+VPCS>
+
+### PC3 -> 10.10.20.103   [PC3->PC2  ACL: IT(30) -> Ventas(20)]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 10.10.20.103 -c 3
+
+84 bytes from 10.10.20.103 icmp_seq=1 ttl=63 time=32.945 ms
+84 bytes from 10.10.20.103 icmp_seq=2 ttl=63 time=32.313 ms
+84 bytes from 10.10.20.103 icmp_seq=3 ttl=63 time=29.757 ms
+
+VPCS>
+
+### PC4 -> 10.10.10.1   [Gateway VLAN10 desde SW2]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 10.10.10.1 -c 3
+
+84 bytes from 10.10.10.1 icmp_seq=1 ttl=64 time=24.729 ms
+84 bytes from 10.10.10.1 icmp_seq=2 ttl=64 time=33.551 ms
+84 bytes from 10.10.10.1 icmp_seq=3 ttl=64 time=33.894 ms
+
+VPCS>
+
+### PC5 -> 10.10.20.1   [Gateway VLAN20 desde SW2]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 10.10.20.1 -c 3
+
+84 bytes from 10.10.20.1 icmp_seq=1 ttl=64 time=33.054 ms
+84 bytes from 10.10.20.1 icmp_seq=2 ttl=64 time=26.672 ms
+84 bytes from 10.10.20.1 icmp_seq=3 ttl=64 time=31.892 ms
+
+VPCS>
+
+### PC5 -> 10.10.30.107   [PC5->PC6  ACL: Ventas(20) -> IT(30) entre switches]
+### Esperado: BLOQUEA  |  Obtenido: BLOQUEA
+----------------------------------------------------------------------
+ping 10.10.30.107 -c 3
+
+10.10.30.107 icmp_seq=1 timeout
+10.10.30.107 icmp_seq=2 timeout
+10.10.30.107 icmp_seq=3 timeout
+
+VPCS>
+
+### PC6 -> 10.10.30.1   [Gateway VLAN30 desde SW2]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 10.10.30.1 -c 3
+
+84 bytes from 10.10.30.1 icmp_seq=1 ttl=64 time=36.042 ms
+84 bytes from 10.10.30.1 icmp_seq=2 ttl=64 time=32.825 ms
+84 bytes from 10.10.30.1 icmp_seq=3 ttl=64 time=36.370 ms
+
+VPCS>
+
+### PC6 -> 10.10.20.106   [PC6->PC5  ACL: IT(30) -> Ventas(20) entre switches]
+### Esperado: PASA  |  Obtenido: PASA
+----------------------------------------------------------------------
+ping 10.10.20.106 -c 3
+
+84 bytes from 10.10.20.106 icmp_seq=1 ttl=63 time=149.756 ms
+84 bytes from 10.10.20.106 icmp_seq=2 ttl=63 time=56.231 ms
+84 bytes from 10.10.20.106 icmp_seq=3 ttl=63 time=59.315 ms
+
+VPCS>
