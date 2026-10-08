@@ -161,3 +161,7 @@ Los contenedores de GNS3 vuelven al estado de su imagen al reiniciarse: en esta 
 ```
 
 `config/aplicar_configuracion.py` no lleva credenciales dentro: lee el usuario y la contraseña del controlador GNS3 desde `gns3_server.ini` de la instalación local en tiempo de ejecución.
+
+## Licencia
+
+[MIT](LICENSE) © 2026 Agustín Alpízar Hernández.
